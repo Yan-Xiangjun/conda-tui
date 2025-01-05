@@ -5,6 +5,9 @@ from textual.containers import *
 from textual.screen import Screen
 from utils import *
 from concurrent.futures import ThreadPoolExecutor
+from rich.table import Table
+import csv
+import io
 
 print("conda env list...")
 envs_lst = conda_env_list()
@@ -66,7 +69,7 @@ class InputDialog(Screen):
 
 
 class CondaTUI(App):
-    DEFAULT_CSS = 'ButtonGroup { height: 1; } Button { height: 1; } Envs { height: auto; }'
+    DEFAULT_CSS = 'ListView { width: 20; } '
     BINDINGS = [('c', 'create', '[+ create]'), ('o', 'clone', '[◪ clone]'),
                 ('i', 'import', '[→ import]'), ('e', 'export', '[↑ export]'),
                 ('r', 'remove', '[× remove]')]
@@ -76,7 +79,7 @@ class CondaTUI(App):
         yield Header()
         yield HorizontalGroup(
             ListView(*list(map(lambda x: ListItem(Label(x)), envs_lst)), id="lst"),
-            Log(id="log", auto_scroll=False),
+            RichLog(id="log", auto_scroll=False),
         )
         yield Footer()
 
@@ -88,9 +91,20 @@ class CondaTUI(App):
         name = self.query('#lst')[0].highlighted_child.children[0].renderable
         global selection
         selection = name
-        log: Log = self.query('#log')[0]
+        log: RichLog = self.query('#log')[0]
         log.clear()
-        log.write_line(envs_pkgs[name])
+        s = envs_pkgs[name]
+        posi = s.find('# Name')
+        head = s[:posi]
+        pkgs_csv = s[posi + 2:]
+        pkgs_csv = ' '.join(list(filter(lambda x: x != '', pkgs_csv.split(' '))))
+        log.write(head)
+        rows = iter(csv.reader(io.StringIO(pkgs_csv), delimiter=' '))
+        table = Table(*next(rows))
+        for row in rows:
+            table.add_row(*row)
+
+        log.write(table)
 
     def action_create(self):
         global operation
