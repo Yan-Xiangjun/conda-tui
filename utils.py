@@ -17,7 +17,7 @@ def conda_env_list():
 
 
 def conda_list(name):
-    pkgs = subprocess.run(f'conda activate {name} && conda list',
+    pkgs = subprocess.run(f'conda run -n {name} conda list',
                           shell=True,
                           stdout=subprocess.PIPE,
                           stderr=subprocess.PIPE,
