@@ -140,7 +140,7 @@ if __name__ == "__main__":
         app = CondaTUI()
         ret = app.run()
         if not isinstance(ret, str):
-            print('程序已退出！')
+            print('CondaTUI已退出！')
             break
         subprocess.run(ret, shell=True, check=True)
         print('回主菜单？(y/n)')
