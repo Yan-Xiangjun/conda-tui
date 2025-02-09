@@ -1,1 +1,1 @@
-python condat.py
+python %~dp0condat.py
