@@ -9,20 +9,24 @@ from rich.table import Table
 import csv
 import io
 
-print("conda env list...")
-envs_lst = conda_env_list()
-print("conda list...")
-pool = ThreadPoolExecutor(max_workers=len(envs_lst))
-pkgs_lst = list(pool.map(conda_list, envs_lst))
-envs_pkgs = dict(zip(envs_lst, pkgs_lst))
 prompts = {
     'create': ['New environment name', 'Python version'],
     'clone': ['New environment name'],
     'import': ['Path to environment file', 'New environment name'],
     'export': ['Path to environment file'],
 }
-operation = ''
-selection = 'base'
+
+
+def reload():
+    global envs_lst, pkgs_lst, envs_pkgs, selection, operation
+    print("conda env list...")
+    envs_lst = conda_env_list()
+    print("conda list...")
+    pool = ThreadPoolExecutor(max_workers=len(envs_lst))
+    pkgs_lst = list(pool.map(conda_list, envs_lst))
+    envs_pkgs = dict(zip(envs_lst, pkgs_lst))
+    operation = ''
+    selection = 'base'
 
 
 class InputDialog(Screen):
@@ -57,11 +61,8 @@ class InputDialog(Screen):
             path: Input = self.query('#textbox0')[0]
             command = f'conda env export -n {selection} -f {path.value}'
         elif operation == 'remove':
-            command = f'conda env remove -n {selection}'
-        with open('command.txt', 'w') as f:
-            f.write(command)
-
-        self.app.exit()
+            command = f'conda env remove -n {selection} -y'
+        self.app.exit(command)
 
     @on(Button.Pressed, '#bu_cancel')
     def press_cancel(self):
@@ -133,5 +134,21 @@ class CondaTUI(App):
 
 
 if __name__ == "__main__":
-    app = CondaTUI()
-    app.run()
+    import subprocess
+    while True:
+        reload()
+        app = CondaTUI()
+        ret = app.run()
+        if not isinstance(ret, str):
+            print('程序已退出！')
+            break
+        subprocess.run(ret, shell=True, check=True)
+        print('回主菜单？(y/n)')
+        inp = input()
+        while inp not in ['y', 'n']:
+            print('输入错误！请输入y或n')
+            inp = input()
+        if inp == 'y':
+            continue
+        else:
+            break
