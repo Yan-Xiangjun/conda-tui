@@ -56,7 +56,7 @@ class InputDialog(Screen):
         elif operation == 'import':
             path: Input = self.query('#textbox0')[0]
             name: Input = self.query('#textbox1')[0]
-            command = f'conda env create -n {name.value} -f {path.value} -y'
+            command = f'conda env create -n {name.value} -f {path.value}'
         elif operation == 'export':
             path: Input = self.query('#textbox0')[0]
             command = f'conda env export -n {selection} -f {path.value}'
