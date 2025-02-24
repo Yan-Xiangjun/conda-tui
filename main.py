@@ -49,14 +49,14 @@ class InputDialog(Screen):
         if operation == 'create':
             name: Input = self.query('#textbox0')[0]
             version: Input = self.query('#textbox1')[0]
-            command = f'conda create -n {name.value} python={version.value}'
+            command = f'conda create -n {name.value} python={version.value} -y'
         elif operation == 'clone':
             name: Input = self.query('#textbox0')[0]
             command = f'conda create -n {name.value} --clone {selection}'
         elif operation == 'import':
             path: Input = self.query('#textbox0')[0]
             name: Input = self.query('#textbox1')[0]
-            command = f'conda env create -n {name.value} -f {path.value}'
+            command = f'conda env create -n {name.value} -f {path.value} -y'
         elif operation == 'export':
             path: Input = self.query('#textbox0')[0]
             command = f'conda env export -n {selection} -f {path.value}'
