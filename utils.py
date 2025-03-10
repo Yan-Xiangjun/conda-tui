@@ -22,5 +22,6 @@ def conda_list(name):
                           stdout=subprocess.PIPE,
                           stderr=subprocess.PIPE,
                           encoding='utf-8').stdout
+    pkgs = pkgs[pkgs.find('# packages in environment'):]
 
     return pkgs
