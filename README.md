@@ -16,7 +16,6 @@ Anaconda公司虽然推出了GUI工具Anaconda Navigator，使用户能够以图
 #### 安装教程
 
 1.  克隆本仓库，或下载zip压缩包并解压
-2.  将本项目所在文件夹添加到PATH环境变量中。对于Windows系统，可以在“高级系统设置”-“环境变量”中设置。对于Linux/Mac系统，可以根据您使用的shell修改对应的配置文件（例如，如果使用bash，则修改.bashrc文件，如果使用zsh，则修改.zshrc文件），并重启终端或使用source命令刷新配置文件
-3.  对于Linux/Mac系统，通过`chmod +x ./condat`为目录中的condat文件赋予执行权限
-4.  在终端中输入`condat`即可启动软件。注意，首次启动时，会在项目所在目录下创建一个Python虚拟环境并在其中安装textual库，后续使用时会自动跳过该步骤。
+2.  打开一个带有Python环境的命令行终端，进入到本项目所在文件夹内，对于Windows系统，运行`.\install.cmd`，对于Linux/Mac系统，运行`bash ./install.sh`
+3.  重启终端，在终端中输入`condat`即可启动软件。
 

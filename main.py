@@ -73,7 +73,7 @@ class CondaTUI(App):
     DEFAULT_CSS = 'ListView { width: 20; } '
     BINDINGS = [('c', 'create', '[+ create]'), ('o', 'clone', '[◪ clone]'),
                 ('i', 'import', '[→ import]'), ('e', 'export', '[↑ export]'),
-                ('r', 'remove', '[× remove]')]
+                ('r', 'remove', '[× remove]'), ('n', 'clean', '[- clean]')]
 
     def compose(self):
         """Create child widgets for the app."""
@@ -131,6 +131,9 @@ class CondaTUI(App):
         global operation
         operation = 'remove'
         self.push_screen(InputDialog())
+
+    def action_clean(self):
+        self.app.exit('conda clean --all')
 
 
 if __name__ == "__main__":
